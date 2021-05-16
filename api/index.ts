@@ -1,5 +1,6 @@
 import express, { Response, Request } from 'express';
 import { config } from './config';
+import imagesApi from './routes/images';
 
 const app = express();
 const router = express.Router();
@@ -13,6 +14,9 @@ router.get('/', (req: Request, res: Response) => {
   res.send(`<h1>Bienvenido a la API de MyUnsplash</h1>`);
 });
 
+
+// Conectando rutas
+imagesApi(app);
 
 // Iniciando servidor
 app.listen(config.port, () => {

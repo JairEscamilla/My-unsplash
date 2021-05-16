@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var image_model_1 = require("../models/image.model");
+var response_1 = require("../response");
 var imagesApi = function (app) {
     var router = express_1.Router();
     app.use('/api/images', router);
@@ -57,10 +58,12 @@ var imagesApi = function (app) {
                             .exec()];
                 case 1:
                     images = _a.sent();
-                    res.status(200).json({
+                    response_1.response({
+                        res: res,
                         ok: true,
+                        status: 200,
                         message: 'Listado de imagenes',
-                        images: images
+                        extra_data: images
                     });
                     return [2 /*return*/];
             }
@@ -69,18 +72,21 @@ var imagesApi = function (app) {
     router.post('/', function (req, res) {
         var body = req.body;
         image_model_1.Image.create(body).then(function (imageDB) {
-            console.log("Pasamos por aqui");
-            res.status(200).json({
+            response_1.response({
+                res: res,
                 ok: true,
-                mesage: "Usuario creado con éxito",
-                image: imageDB
+                status: 200,
+                message: "Se ha creado con exito el recurso",
+                extra_data: imageDB
             });
         })
             .catch(function (error) {
             console.error(error);
-            res.status(500).json({
+            response_1.response({
+                res: res,
                 ok: false,
-                message: "Ha ocurrido un error al guardar la imagen):"
+                status: 500,
+                message: "Ha ocurrido un error):"
             });
         });
     });

@@ -1,5 +1,6 @@
 import { Router, Express, Request, Response } from 'express';
 import { Image } from '../models/image.model';
+import { response } from '../response';
 
 const imagesApi = (app: Express) => {
   const router = Router();
@@ -17,11 +18,12 @@ const imagesApi = (app: Express) => {
                               .skip(skip)
                               .limit(10)
                               .exec();
-
-    res.status(200).json({
+    response({
+      res: res,
       ok: true,
+      status: 200,
       message: 'Listado de imagenes',
-      images
+      extra_data: images
     });
   });
 
@@ -29,18 +31,21 @@ const imagesApi = (app: Express) => {
     const { body } = req;
     
     Image.create( body ).then(imageDB => {
-      console.log("Pasamos por aqui");
-      res.status(200).json({
+      response({
+        res: res,
         ok: true,
-        mesage: "Usuario creado con éxito",
-        image: imageDB
-      });
+        status: 200,
+        message: "Se ha creado con exito el recurso",
+        extra_data: imageDB
+      })
     })
     .catch(error => {
       console.error(error);
-      res.status(500).json({
+      response({
+        res: res,
         ok: false,
-        message: "Ha ocurrido un error al guardar la imagen):"
+        status: 500,
+        message: "Ha ocurrido un error):"
       })
     });
 

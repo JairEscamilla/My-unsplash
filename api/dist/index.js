@@ -6,8 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var config_1 = require("./config");
 var images_1 = __importDefault(require("./routes/images"));
+var mongoose_1 = __importDefault(require("mongoose"));
 var app = express_1.default();
 var router = express_1.default.Router();
+var USER = config_1.config.dbuser;
+var PASSWORD = config_1.config.dbpassword;
+// Conexion con la base de datos
+var MONGO_URI = "mongodb+srv://" + USER + ":" + PASSWORD + "@" + config_1.config.dbHost + ":/" + config_1.config.dbName + "?retryWrites=true&w=majority";
+mongoose_1.default.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}, function (error) {
+    if (error) {
+        console.error('Ha ocurrido un error):');
+        throw error;
+    }
+    console.log('La base de datos está conectada');
+});
 // Middlewares
 app.use(express_1.default.json());
 app.use(router);

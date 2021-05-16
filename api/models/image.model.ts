@@ -23,6 +23,7 @@ interface Iimages extends Document {
 
 imageSchema.pre<Iimages>('save', function(next){
   this.created_at = new Date();
+  // Aqui es donde voy a generar el thumbnail
   next();
 });
 

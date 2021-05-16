@@ -7,7 +7,16 @@ const imagesApi = (app: Express) => {
   app.use('/api/images', router);
 
   router.get('/', async (req: Request, res: Response) => {
-    const images = await Image.find();
+    const { query: { page } } = req;
+    let pagina = Number(page) || 1;
+    let skip = pagina - 1;
+    skip = skip * 10;
+
+    const images = await Image.find()
+                              .sort({ _id: -1 })
+                              .skip(skip)
+                              .limit(10)
+                              .exec();
 
     res.status(200).json({
       ok: true,

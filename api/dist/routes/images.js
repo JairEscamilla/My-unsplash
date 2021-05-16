@@ -42,10 +42,19 @@ var imagesApi = function (app) {
     var router = express_1.Router();
     app.use('/api/images', router);
     router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var images;
+        var page, pagina, skip, images;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, image_model_1.Image.find()];
+                case 0:
+                    page = req.query.page;
+                    pagina = Number(page) || 1;
+                    skip = pagina - 1;
+                    skip = skip * 10;
+                    return [4 /*yield*/, image_model_1.Image.find()
+                            .sort({ _id: -1 })
+                            .skip(skip)
+                            .limit(10)
+                            .exec()];
                 case 1:
                     images = _a.sent();
                     res.status(200).json({

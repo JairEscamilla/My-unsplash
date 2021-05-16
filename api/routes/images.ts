@@ -49,6 +49,29 @@ const imagesApi = (app: Express) => {
       })
     });
 
+  });
+
+  router.delete('/:id', async (req: Request, res: Response) => {
+    const { params: { id } } = req;
+
+    try{
+      await Image.deleteOne({ _id: id });
+      response({
+        res: res,
+        ok: true,
+        status: 202,
+        message: 'La imagen se ha eliminado exitosamente'
+      });
+    }catch(error){
+      console.error(`Ha ocurrido un error: ${error}`);
+      response({
+        res: res,
+        ok: false,
+        status: 500,
+        message: 'No se ha podido eliminar la imagen'
+      });
+    }
+
   })
 }
 

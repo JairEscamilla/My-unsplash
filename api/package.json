@@ -12,5 +12,13 @@
     "typescript"
   ],
   "author": "Jair Escamilla",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.11"
+  },
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1"
+  }
 }

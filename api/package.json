@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "cloudinary": "^1.25.1",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongoose": "^5.12.9"

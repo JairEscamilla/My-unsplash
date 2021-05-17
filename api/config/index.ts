@@ -6,5 +6,8 @@ export const config = {
   dbuser: process.env.USER,
   dbpassword: process.env.PASSWORD,
   dbHost: process.env.DB_HOST,
-  dbName: process.env.DB_NAME
+  dbName: process.env.DB_NAME,
+  cloudName: process.env.CLOUD_NAME,
+  apiKey: process.env.API_KEY,
+  apiSecret: process.env.API_SECRET
 };

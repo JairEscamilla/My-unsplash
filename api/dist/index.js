@@ -7,7 +7,9 @@ var express_1 = __importDefault(require("express"));
 var config_1 = require("./config");
 var images_1 = __importDefault(require("./routes/images"));
 var mongoose_1 = __importDefault(require("mongoose"));
-var cloudinary = require('cloudinary').v2;
+var body_parser_1 = __importDefault(require("body-parser"));
+var express_fileupload_1 = __importDefault(require("express-fileupload"));
+var cloudinary_1 = __importDefault(require("cloudinary"));
 var app = express_1.default();
 var router = express_1.default.Router();
 // Conexion con la base de datos
@@ -26,13 +28,15 @@ mongoose_1.default.connect(MONGO_URI, {
     console.log('La base de datos está conectada');
 });
 // Configuracion de cloudinary
-cloudinary.config({
+cloudinary_1.default.v2.config({
     cloud_name: config_1.config.cloudName,
     api_key: config_1.config.apiKey,
     api_secret: config_1.config.apiSecret
 });
 // Middlewares
 app.use(express_1.default.json());
+app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(express_fileupload_1.default({ useTempFiles: true }));
 app.use(router);
 // Ruta principal
 router.get('/', function (req, res) {

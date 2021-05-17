@@ -2,7 +2,9 @@ import express, { Response, Request } from 'express';
 import { config } from './config';
 import imagesApi from './routes/images';
 import mongoose from 'mongoose';
-const cloudinary = require('cloudinary').v2;
+import bodyParser from 'body-parser';
+import fileUpload from 'express-fileupload';
+import cloudinary from 'cloudinary';
 
 const app = express();
 const router = express.Router();
@@ -24,7 +26,7 @@ mongoose.connect(MONGO_URI, {
 })
 
 // Configuracion de cloudinary
-cloudinary.config({
+cloudinary.v2.config({
   cloud_name: config.cloudName,
   api_key: config.apiKey,
   api_secret: config.apiSecret
@@ -32,6 +34,8 @@ cloudinary.config({
 
 // Middlewares
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload({ useTempFiles: true }));
 app.use(router);
 
 // Ruta principal

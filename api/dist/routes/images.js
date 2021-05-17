@@ -35,10 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var image_model_1 = require("../models/image.model");
 var response_1 = require("../response");
+// const cloudinary = require("cloudinary").v2;
+var cloudinary_1 = __importDefault(require("cloudinary"));
 var imagesApi = function (app) {
     var router = express_1.Router();
     app.use('/api/images', router);
@@ -71,23 +76,25 @@ var imagesApi = function (app) {
     }); });
     router.post('/', function (req, res) {
         var body = req.body;
-        image_model_1.Image.create(body).then(function (imageDB) {
-            response_1.response({
-                res: res,
-                ok: true,
-                status: 200,
-                message: "Se ha creado con exito el recurso",
-                extra_data: imageDB
-            });
-        })
-            .catch(function (error) {
-            console.error(error);
+        if (!req.files)
             response_1.response({
                 res: res,
                 ok: false,
                 status: 500,
                 message: "Ha ocurrido un error):"
             });
+        var image = req.files.image;
+        cloudinary_1.default.v2.uploader.upload(image.tempFilePath, function (error, result) {
+            if (error) {
+                console.error("Ha ocurrido un error " + error);
+            }
+            else {
+                console.log('Se ha subido con exito la imagen');
+                console.log(result);
+            }
+        });
+        res.json({
+            message: "Imagen subida con exito"
         });
     });
     router.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {

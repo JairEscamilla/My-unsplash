@@ -1,6 +1,19 @@
 import { Router, Express, Request, Response } from 'express';
 import { Image } from '../models/image.model';
 import { response } from '../response';
+import streamifier from 'streamifier';
+// const cloudinary = require("cloudinary").v2;
+import cloudinary from 'cloudinary';
+
+interface FileUpload{
+    name: string,
+    data: any;
+    encoding: string,
+    tempFilePath: string,
+    truncated: boolean,
+    mimetype: string
+    mv: Function;
+}
 
 const imagesApi = (app: Express) => {
   const router = Router();
@@ -27,26 +40,31 @@ const imagesApi = (app: Express) => {
     });
   });
 
-  router.post('/', (req: Request, res: Response) => {
+  router.post('/', (req: any, res: Response) => {
     const { body } = req;
     
-    Image.create( body ).then(imageDB => {
-      response({
-        res: res,
-        ok: true,
-        status: 200,
-        message: "Se ha creado con exito el recurso",
-        extra_data: imageDB
-      })
-    })
-    .catch(error => {
-      console.error(error);
-      response({
-        res: res,
-        ok: false,
-        status: 500,
-        message: "Ha ocurrido un error):"
-      })
+    if(!req.files)
+          response({
+          res: res,
+          ok: false,
+          status: 500,
+          message: "Ha ocurrido un error):"
+        })
+    
+    const image: FileUpload = req.files.image;
+    
+    cloudinary.v2.uploader.upload(image.tempFilePath, (error, result) => {
+      if(error){
+        console.error(`Ha ocurrido un error ${error}`);
+      }else{
+        console.log('Se ha subido con exito la imagen');
+        console.log(result);
+      }
+    });
+    
+
+    res.json({
+      message: "Imagen subida con exito"
     });
 
   });

@@ -42,8 +42,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var image_model_1 = require("../models/image.model");
 var response_1 = require("../response");
-// const cloudinary = require("cloudinary").v2;
 var cloudinary_1 = __importDefault(require("cloudinary"));
+var cloudinaryOptions = {
+    folder: 'uploads/',
+    unique_filename: true,
+    overwrite: false,
+    eager: [
+        {
+            width: 5,
+            height: 5,
+            crop: 'fill'
+        }
+    ]
+};
 var imagesApi = function (app) {
     var router = express_1.Router();
     app.use('/api/images', router);
@@ -84,7 +95,7 @@ var imagesApi = function (app) {
                 message: "Ha ocurrido un error):"
             });
         var image = req.files.image;
-        cloudinary_1.default.v2.uploader.upload(image.tempFilePath, function (error, result) {
+        cloudinary_1.default.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, function (error, result) {
             if (error) {
                 console.error("Ha ocurrido un error " + error);
             }

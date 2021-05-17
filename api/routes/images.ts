@@ -1,8 +1,6 @@
 import { Router, Express, Request, Response } from 'express';
 import { Image } from '../models/image.model';
 import { response } from '../response';
-import streamifier from 'streamifier';
-// const cloudinary = require("cloudinary").v2;
 import cloudinary from 'cloudinary';
 
 interface FileUpload{
@@ -13,6 +11,19 @@ interface FileUpload{
     truncated: boolean,
     mimetype: string
     mv: Function;
+}
+
+const cloudinaryOptions = {
+  folder: 'uploads/',
+  unique_filename: true,
+  overwrite: false,
+  eager: [
+    {
+      width: 5,
+      height: 5,
+      crop: 'fill'
+    }
+  ]
 }
 
 const imagesApi = (app: Express) => {
@@ -53,7 +64,7 @@ const imagesApi = (app: Express) => {
     
     const image: FileUpload = req.files.image;
     
-    cloudinary.v2.uploader.upload(image.tempFilePath, (error, result) => {
+    cloudinary.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, (error, result) => {
       if(error){
         console.error(`Ha ocurrido un error ${error}`);
       }else{

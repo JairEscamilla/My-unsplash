@@ -14,9 +14,4 @@ var imageSchema = new mongoose_1.Schema({
         type: Date
     }
 });
-imageSchema.pre('save', function (next) {
-    this.created_at = new Date();
-    // Aqui es donde voy a generar el thumbnail
-    next();
-});
 exports.Image = mongoose_1.model('Image', imageSchema);

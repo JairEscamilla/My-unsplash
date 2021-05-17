@@ -86,7 +86,6 @@ var imagesApi = function (app) {
         });
     }); });
     router.post('/', function (req, res) {
-        var body = req.body;
         if (!req.files)
             response_1.response({
                 res: res,
@@ -95,18 +94,47 @@ var imagesApi = function (app) {
                 message: "Ha ocurrido un error):"
             });
         var image = req.files.image;
-        cloudinary_1.default.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, function (error, result) {
-            if (error) {
-                console.error("Ha ocurrido un error " + error);
-            }
-            else {
-                console.log('Se ha subido con exito la imagen');
-                console.log(result);
-            }
-        });
-        res.json({
-            message: "Imagen subida con exito"
-        });
+        if (!image.mimetype.includes('image'))
+            response_1.response({
+                res: res,
+                ok: false,
+                status: 500,
+                message: 'El archivo subido no es una imagen'
+            });
+        cloudinary_1.default.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, function (error, result) { return __awaiter(void 0, void 0, void 0, function () {
+            var newImage, imageDB;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!error) return [3 /*break*/, 1];
+                        response_1.response({
+                            res: res,
+                            ok: false,
+                            message: 'Ha ocurrido un error al subir la imagen):',
+                            status: 500
+                        });
+                        return [3 /*break*/, 3];
+                    case 1:
+                        newImage = {
+                            image: result === null || result === void 0 ? void 0 : result.secure_url,
+                            thumbnail: result === null || result === void 0 ? void 0 : result.eager[0].secure_url,
+                            created_at: result === null || result === void 0 ? void 0 : result.created_at
+                        };
+                        return [4 /*yield*/, image_model_1.Image.create(newImage)];
+                    case 2:
+                        imageDB = _a.sent();
+                        response_1.response({
+                            res: res,
+                            ok: true,
+                            status: 201,
+                            message: 'Imagen subida con exito',
+                            extra_data: imageDB
+                        });
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
     });
     router.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var id, error_1;

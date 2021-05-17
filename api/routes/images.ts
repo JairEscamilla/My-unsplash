@@ -2,16 +2,9 @@ import { Router, Express, Request, Response } from 'express';
 import { Image } from '../models/image.model';
 import { response } from '../response';
 import cloudinary from 'cloudinary';
+import { FileUpload } from '../interfaces/images.interfaces';
 
-interface FileUpload{
-    name: string,
-    data: any;
-    encoding: string,
-    tempFilePath: string,
-    truncated: boolean,
-    mimetype: string
-    mv: Function;
-}
+
 
 const cloudinaryOptions = {
   folder: 'uploads/',
@@ -52,32 +45,51 @@ const imagesApi = (app: Express) => {
   });
 
   router.post('/', (req: any, res: Response) => {
-    const { body } = req;
     
     if(!req.files)
-          response({
+      response({
+        res: res,
+        ok: false,
+        status: 500,
+        message: "Ha ocurrido un error):"
+      })    
+
+    const image: FileUpload = req.files.image;
+
+    if(!image.mimetype.includes('image'))
+        response({
           res: res,
           ok: false,
           status: 500,
-          message: "Ha ocurrido un error):"
-        })
+          message: 'El archivo subido no es una imagen'
+        });
     
-    const image: FileUpload = req.files.image;
     
-    cloudinary.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, (error, result) => {
+    cloudinary.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, async (error, result) => {
       if(error){
-        console.error(`Ha ocurrido un error ${error}`);
+        response({
+          res: res,
+          ok: false,
+          message: 'Ha ocurrido un error al subir la imagen):',
+          status: 500
+        });
       }else{
-        console.log('Se ha subido con exito la imagen');
-        console.log(result);
+        const newImage = {
+          image: result?.secure_url,
+          thumbnail: result?.eager[0].secure_url,
+          created_at: result?.created_at
+        }
+
+        const imageDB = await Image.create(newImage);
+        response({
+          res: res,
+          ok: true,
+          status: 201,
+          message: 'Imagen subida con exito',
+          extra_data: imageDB
+        });
       }
     });
-    
-
-    res.json({
-      message: "Imagen subida con exito"
-    });
-
   });
 
   router.delete('/:id', async (req: Request, res: Response) => {

@@ -1,4 +1,5 @@
 import { Schema, Document, model } from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new Schema({
   username: {
@@ -30,5 +31,10 @@ interface IUser extends Document {
   password: string;
   profile_photo: string;
 }
+
+userSchema.pre<IUser>('save', function(next){
+  this.password = bcrypt.hashSync(this.password, 10);
+  next();
+});
 
 export const User = model<IUser>('User', userSchema);

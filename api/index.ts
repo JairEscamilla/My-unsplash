@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import cloudinary from 'cloudinary';
+import usersApi from './routes/users';
 
 const app = express();
 const router = express.Router();
@@ -46,6 +47,7 @@ router.get('/', (req: Request, res: Response) => {
 
 // Conectando rutas
 imagesApi(app);
+usersApi(app);
 
 // Iniciando servidor
 app.listen(config.port, () => {

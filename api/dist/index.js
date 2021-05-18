@@ -10,6 +10,7 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var express_fileupload_1 = __importDefault(require("express-fileupload"));
 var cloudinary_1 = __importDefault(require("cloudinary"));
+var users_1 = __importDefault(require("./routes/users"));
 var app = express_1.default();
 var router = express_1.default.Router();
 // Conexion con la base de datos
@@ -44,6 +45,7 @@ router.get('/', function (req, res) {
 });
 // Conectando rutas
 images_1.default(app);
+users_1.default(app);
 // Iniciando servidor
 app.listen(config_1.config.port, function () {
     console.log("Server listening on port " + config_1.config.port);

@@ -10,6 +10,22 @@ var imageSchema = new mongoose_1.Schema({
     thumbnail: {
         type: String,
     },
+    asset_id: {
+        type: String,
+        required: [true, "El asset debe tener un id"]
+    },
+    public_id: {
+        type: String,
+        required: [true, "El asset debe tener un id publico"]
+    },
+    height: {
+        type: Number,
+        required: [true, "El asset debe tener una altura"]
+    },
+    width: {
+        type: Number,
+        required: [true, "El asset debe tener un ancho"]
+    },
     created_at: {
         type: Date
     }

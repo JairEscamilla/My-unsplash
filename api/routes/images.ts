@@ -74,9 +74,15 @@ const imagesApi = (app: Express) => {
           status: 500
         });
       }else{
+        console.log(result);
+        
         const newImage = {
           image: result?.secure_url,
           thumbnail: result?.eager[0].secure_url,
+          asset_id: result?.asset_id,
+          public_id: result?.public_id,
+          width: result?.width,
+          height: result?.height,
           created_at: result?.created_at
         }
 
@@ -94,14 +100,18 @@ const imagesApi = (app: Express) => {
 
   router.delete('/:id', async (req: Request, res: Response) => {
     const { params: { id } } = req;
+    const imageToDelete = await Image.findOne({ _id: id });
+    const public_id  = imageToDelete?.public_id || "";
 
     try{
       await Image.deleteOne({ _id: id });
-      response({
-        res: res,
-        ok: true,
-        status: 202,
-        message: 'La imagen se ha eliminado exitosamente'
+      cloudinary.v2.uploader.destroy(public_id, (error, result) => {
+        if(error){
+          console.error(error);
+          response({ res: res, ok: false, status: 500, message: "Ha ocurrido un error):" });
+        }else{
+          response({ res: res, ok: true, status: 202, message: 'La imagen se ha eliminado exitosamente'});
+        }
       });
     }catch(error){
       console.error(`Ha ocurrido un error: ${error}`);

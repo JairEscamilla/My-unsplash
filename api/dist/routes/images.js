@@ -115,9 +115,14 @@ var imagesApi = function (app) {
                         });
                         return [3 /*break*/, 3];
                     case 1:
+                        console.log(result);
                         newImage = {
                             image: result === null || result === void 0 ? void 0 : result.secure_url,
                             thumbnail: result === null || result === void 0 ? void 0 : result.eager[0].secure_url,
+                            asset_id: result === null || result === void 0 ? void 0 : result.asset_id,
+                            public_id: result === null || result === void 0 ? void 0 : result.public_id,
+                            width: result === null || result === void 0 ? void 0 : result.width,
+                            height: result === null || result === void 0 ? void 0 : result.height,
                             created_at: result === null || result === void 0 ? void 0 : result.created_at
                         };
                         return [4 /*yield*/, image_model_1.Image.create(newImage)];
@@ -137,25 +142,32 @@ var imagesApi = function (app) {
         }); });
     });
     router.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, error_1;
+        var id, imageToDelete, public_id, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
-                    _a.label = 1;
+                    return [4 /*yield*/, image_model_1.Image.findOne({ _id: id })];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, image_model_1.Image.deleteOne({ _id: id })];
+                    imageToDelete = _a.sent();
+                    public_id = (imageToDelete === null || imageToDelete === void 0 ? void 0 : imageToDelete.public_id) || "";
+                    _a.label = 2;
                 case 2:
-                    _a.sent();
-                    response_1.response({
-                        res: res,
-                        ok: true,
-                        status: 202,
-                        message: 'La imagen se ha eliminado exitosamente'
-                    });
-                    return [3 /*break*/, 4];
+                    _a.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, image_model_1.Image.deleteOne({ _id: id })];
                 case 3:
+                    _a.sent();
+                    cloudinary_1.default.v2.uploader.destroy(public_id, function (error, result) {
+                        if (error) {
+                            console.error(error);
+                            response_1.response({ res: res, ok: false, status: 500, message: "Ha ocurrido un error):" });
+                        }
+                        else {
+                            response_1.response({ res: res, ok: true, status: 202, message: 'La imagen se ha eliminado exitosamente' });
+                        }
+                    });
+                    return [3 /*break*/, 5];
+                case 4:
                     error_1 = _a.sent();
                     console.error("Ha ocurrido un error: " + error_1);
                     response_1.response({
@@ -164,8 +176,8 @@ var imagesApi = function (app) {
                         status: 500,
                         message: 'No se ha podido eliminar la imagen'
                     });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
             }
         });
     }); });

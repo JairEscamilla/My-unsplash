@@ -20,6 +20,7 @@
     "@types/express-fileupload": "^1.1.6",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/passport-http": "^0.3.8",
+    "@types/passport-jwt": "^3.0.5",
     "@types/streamifier": "^0.1.0"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.9",
     "passport": "^0.4.1",
-    "passport-http": "^0.3.0"
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0"
   }
 }

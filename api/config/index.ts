@@ -9,5 +9,6 @@ export const config = {
   dbName: process.env.DB_NAME,
   cloudName: process.env.CLOUD_NAME,
   apiKey: process.env.API_KEY,
-  apiSecret: process.env.API_SECRET
+  apiSecret: process.env.API_SECRET,
+  jwtKey: process.env.JWT_KEY
 };

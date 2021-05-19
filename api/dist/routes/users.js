@@ -35,17 +35,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
+var passport_1 = __importDefault(require("passport"));
 var user_model_1 = require("../models/user.model");
 var response_1 = require("../response");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+require("../strategies/basic");
+var index_1 = require("../config/index");
 var usersApi = function (app) {
     var router = express_1.Router();
     app.use('/api/users', router);
     router.get('', function (req, res) {
         res.status(200).send('Todo bien');
     });
-    router.post('', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    router.post('/sign_in', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            passport_1.default.authenticate('basic', function (error, user) {
+                console.log("pasa por aca");
+                if (error || !user)
+                    response_1.response({ res: res, ok: false, status: 501, message: 'Credenciales incorrectas' });
+                req.login(user, { session: false }, function (error) {
+                    return __awaiter(this, void 0, void 0, function () {
+                        var username, email, profile_photo, payload, jwtSecret, token;
+                        return __generator(this, function (_a) {
+                            if (error)
+                                response_1.response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al autenticar al usuario' });
+                            username = user.username, email = user.email, profile_photo = user.profile_photo;
+                            payload = {
+                                email: email
+                            };
+                            jwtSecret = "" + index_1.config.jwtKey;
+                            token = jsonwebtoken_1.default.sign(payload, jwtSecret, {
+                                expiresIn: '1h'
+                            });
+                            response_1.response({ res: res, ok: true, status: 200, message: 'Inicio de sesión exitoso', extra_data: { user: { username: username, email: email, profile_photo: profile_photo }, token: token } });
+                            return [2 /*return*/];
+                        });
+                    });
+                });
+            })(req, res, next);
+            return [2 /*return*/];
+        });
+    }); });
+    router.post('/sign_up', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var body, userCreated, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {

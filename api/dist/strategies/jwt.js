@@ -58,7 +58,11 @@ passport_1.default.use(new passport_jwt_1.Strategy(strategyConfig, function (tok
                 user = _a.sent();
                 if (!user)
                     return [2 /*return*/, cb("No estas autorizado para acceder a esta ruta", user)];
-                cb(null, user);
+                cb(null, {
+                    '_id': user._id,
+                    username: user.username,
+                    email: user.email
+                });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();

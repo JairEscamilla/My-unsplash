@@ -3,7 +3,8 @@ import { Image } from '../models/image.model';
 import { response } from '../response';
 import cloudinary from 'cloudinary';
 import { FileUpload } from '../interfaces/images.interfaces';
-
+import '../strategies/jwt';
+import passport from 'passport';
 
 
 const cloudinaryOptions = {
@@ -24,8 +25,10 @@ const imagesApi = (app: Express) => {
 
   app.use('/api/images', router);
 
-  router.get('/', async (req: Request, res: Response) => {
+  router.get('/', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
     const { query: { page } } = req;
+    console.log(req.user);
+    
     let pagina = Number(page) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
@@ -44,7 +47,7 @@ const imagesApi = (app: Express) => {
     });
   });
 
-  router.post('/', (req: any, res: Response) => {
+  router.post('/', passport.authenticate('jwt', { session: false }), (req: any, res: Response) => {
     
     if(!req.files)
       response({

@@ -43,6 +43,8 @@ var express_1 = require("express");
 var image_model_1 = require("../models/image.model");
 var response_1 = require("../response");
 var cloudinary_1 = __importDefault(require("cloudinary"));
+require("../strategies/jwt");
+var passport_1 = __importDefault(require("passport"));
 var cloudinaryOptions = {
     folder: 'uploads/',
     unique_filename: true,
@@ -58,12 +60,13 @@ var cloudinaryOptions = {
 var imagesApi = function (app) {
     var router = express_1.Router();
     app.use('/api/images', router);
-    router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    router.get('/', passport_1.default.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var page, pagina, skip, images;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     page = req.query.page;
+                    console.log(req.user);
                     pagina = Number(page) || 1;
                     skip = pagina - 1;
                     skip = skip * 10;
@@ -85,7 +88,7 @@ var imagesApi = function (app) {
             }
         });
     }); });
-    router.post('/', function (req, res) {
+    router.post('/', passport_1.default.authenticate('jwt', { session: false }), function (req, res) {
         if (!req.files)
             response_1.response({
                 res: res,

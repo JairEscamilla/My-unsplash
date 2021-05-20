@@ -26,6 +26,11 @@ var imageSchema = new mongoose_1.Schema({
         type: Number,
         required: [true, "El asset debe tener un ancho"]
     },
+    user: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Debe existir una referencia a un usuario']
+    },
     created_at: {
         type: Date
     }

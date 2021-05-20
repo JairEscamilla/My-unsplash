@@ -50,34 +50,18 @@ const imagesApi = (app: Express) => {
   router.post('/', passport.authenticate('jwt', { session: false }), (req: any, res: Response) => {
     
     if(!req.files)
-      response({
-        res: res,
-        ok: false,
-        status: 500,
-        message: "Ha ocurrido un error):"
-      })    
+      response({ res: res, ok: false, status: 500, message: "Ha ocurrido un error):" })    
 
     const image: FileUpload = req.files.image;
 
     if(!image.mimetype.includes('image'))
-        response({
-          res: res,
-          ok: false,
-          status: 500,
-          message: 'El archivo subido no es una imagen'
-        });
+        response({ res: res, ok: false, status: 500, message: 'El archivo subido no es una imagen'});
     
     
     cloudinary.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, async (error, result) => {
       if(error){
-        response({
-          res: res,
-          ok: false,
-          message: 'Ha ocurrido un error al subir la imagen):',
-          status: 500
-        });
+        response({ res: res, ok: false, message: 'Ha ocurrido un error al subir la imagen):', status: 500 });
       }else{
-        console.log(result);
         
         const newImage = {
           image: result?.secure_url,
@@ -86,22 +70,22 @@ const imagesApi = (app: Express) => {
           public_id: result?.public_id,
           width: result?.width,
           height: result?.height,
+          user: req.user,
           created_at: result?.created_at
         }
 
-        const imageDB = await Image.create(newImage);
-        response({
-          res: res,
-          ok: true,
-          status: 201,
-          message: 'Imagen subida con exito',
-          extra_data: imageDB
-        });
+        try{
+          const imageDB = await Image.create(newImage);
+          await imageDB.populate('user', '-password').execPopulate();
+          response({ res: res, ok: true, status: 201, message: 'Imagen subida con exito', extra_data: imageDB });
+        }catch(error){
+          response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al insertar la imagen'  });
+        }
       }
     });
   });
 
-  router.delete('/:id', async (req: Request, res: Response) => {
+  router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
     const { params: { id } } = req;
     const imageToDelete = await Image.findOne({ _id: id });
     const public_id  = imageToDelete?.public_id || "";

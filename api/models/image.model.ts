@@ -30,6 +30,12 @@ const imageSchema = new Schema({
     required: [true, "El asset debe tener un ancho"]
   },
 
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Debe existir una referencia a un usuario']
+  },
+
   created_at: {
     type: Date
   }

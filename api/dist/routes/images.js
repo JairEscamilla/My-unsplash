@@ -90,35 +90,19 @@ var imagesApi = function (app) {
     }); });
     router.post('/', passport_1.default.authenticate('jwt', { session: false }), function (req, res) {
         if (!req.files)
-            response_1.response({
-                res: res,
-                ok: false,
-                status: 500,
-                message: "Ha ocurrido un error):"
-            });
+            response_1.response({ res: res, ok: false, status: 500, message: "Ha ocurrido un error):" });
         var image = req.files.image;
         if (!image.mimetype.includes('image'))
-            response_1.response({
-                res: res,
-                ok: false,
-                status: 500,
-                message: 'El archivo subido no es una imagen'
-            });
+            response_1.response({ res: res, ok: false, status: 500, message: 'El archivo subido no es una imagen' });
         cloudinary_1.default.v2.uploader.upload(image.tempFilePath, cloudinaryOptions, function (error, result) { return __awaiter(void 0, void 0, void 0, function () {
-            var newImage, imageDB;
+            var newImage, imageDB, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!error) return [3 /*break*/, 1];
-                        response_1.response({
-                            res: res,
-                            ok: false,
-                            message: 'Ha ocurrido un error al subir la imagen):',
-                            status: 500
-                        });
-                        return [3 /*break*/, 3];
+                        response_1.response({ res: res, ok: false, message: 'Ha ocurrido un error al subir la imagen):', status: 500 });
+                        return [3 /*break*/, 6];
                     case 1:
-                        console.log(result);
                         newImage = {
                             image: result === null || result === void 0 ? void 0 : result.secure_url,
                             thumbnail: result === null || result === void 0 ? void 0 : result.eager[0].secure_url,
@@ -126,26 +110,31 @@ var imagesApi = function (app) {
                             public_id: result === null || result === void 0 ? void 0 : result.public_id,
                             width: result === null || result === void 0 ? void 0 : result.width,
                             height: result === null || result === void 0 ? void 0 : result.height,
+                            user: req.user,
                             created_at: result === null || result === void 0 ? void 0 : result.created_at
                         };
-                        return [4 /*yield*/, image_model_1.Image.create(newImage)];
+                        _a.label = 2;
                     case 2:
+                        _a.trys.push([2, 5, , 6]);
+                        return [4 /*yield*/, image_model_1.Image.create(newImage)];
+                    case 3:
                         imageDB = _a.sent();
-                        response_1.response({
-                            res: res,
-                            ok: true,
-                            status: 201,
-                            message: 'Imagen subida con exito',
-                            extra_data: imageDB
-                        });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                        return [4 /*yield*/, imageDB.populate('user', '-password').execPopulate()];
+                    case 4:
+                        _a.sent();
+                        response_1.response({ res: res, ok: true, status: 201, message: 'Imagen subida con exito', extra_data: imageDB });
+                        return [3 /*break*/, 6];
+                    case 5:
+                        error_1 = _a.sent();
+                        response_1.response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al insertar la imagen' });
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         }); });
     });
-    router.delete('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, imageToDelete, public_id, error_1;
+    router.delete('/:id', passport_1.default.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, imageToDelete, public_id, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -171,8 +160,8 @@ var imagesApi = function (app) {
                     });
                     return [3 /*break*/, 5];
                 case 4:
-                    error_1 = _a.sent();
-                    console.error("Ha ocurrido un error: " + error_1);
+                    error_2 = _a.sent();
+                    console.error("Ha ocurrido un error: " + error_2);
                     response_1.response({
                         res: res,
                         ok: false,

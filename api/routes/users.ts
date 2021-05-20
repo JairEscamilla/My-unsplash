@@ -62,9 +62,6 @@ const usersApi = (app: Express) => {
       { email: usernameOrEmail }
     ]).exec();
 
-    console.log(user);
-    
-
     if(user.length === 0)
       response({ res: res, ok: true, status: 200, message: 'Username o email disponibles' });
     else

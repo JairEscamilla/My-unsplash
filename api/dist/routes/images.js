@@ -45,6 +45,7 @@ var response_1 = require("../response");
 var cloudinary_1 = __importDefault(require("cloudinary"));
 require("../strategies/jwt");
 var passport_1 = __importDefault(require("passport"));
+var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var cloudinaryOptions = {
     folder: 'uploads/',
     unique_filename: true,
@@ -66,7 +67,6 @@ var imagesApi = function (app) {
             switch (_a.label) {
                 case 0:
                     page = req.query.page;
-                    console.log(req.user);
                     pagina = Number(page) || 1;
                     skip = pagina - 1;
                     skip = skip * 10;
@@ -134,20 +134,26 @@ var imagesApi = function (app) {
         }); });
     });
     router.delete('/:id', passport_1.default.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, imageToDelete, public_id, error_2;
+        var id, password, imageToDelete, public_id, currentUser, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     id = req.params.id;
+                    password = req.body.password;
                     return [4 /*yield*/, image_model_1.Image.findOne({ _id: id })];
                 case 1:
                     imageToDelete = _a.sent();
                     public_id = (imageToDelete === null || imageToDelete === void 0 ? void 0 : imageToDelete.public_id) || "";
-                    _a.label = 2;
+                    currentUser = req.user;
+                    return [4 /*yield*/, bcryptjs_1.default.compare(password, currentUser.password)];
                 case 2:
-                    _a.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, image_model_1.Image.deleteOne({ _id: id })];
+                    if (!(_a.sent()))
+                        return [2 /*return*/, response_1.response({ res: res, ok: false, status: 401, message: 'No estas autorizado para eliminar esta imagen' })];
+                    _a.label = 3;
                 case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, image_model_1.Image.deleteOne({ _id: id })];
+                case 4:
                     _a.sent();
                     cloudinary_1.default.v2.uploader.destroy(public_id, function (error, result) {
                         if (error) {
@@ -158,8 +164,8 @@ var imagesApi = function (app) {
                             response_1.response({ res: res, ok: true, status: 202, message: 'La imagen se ha eliminado exitosamente' });
                         }
                     });
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 6];
+                case 5:
                     error_2 = _a.sent();
                     console.error("Ha ocurrido un error: " + error_2);
                     response_1.response({
@@ -168,8 +174,8 @@ var imagesApi = function (app) {
                         status: 500,
                         message: 'No se ha podido eliminar la imagen'
                     });
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     }); });

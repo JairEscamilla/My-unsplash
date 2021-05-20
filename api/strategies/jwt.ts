@@ -16,11 +16,7 @@ passport.use(
       if(!user)
         return cb("No estas autorizado para acceder a esta ruta", user);
       
-      cb(null, {
-        '_id': user._id,  
-        username: user.username,
-        email: user.email
-      });
+      cb(null, user);
     }catch(error){
       cb(error);
     }

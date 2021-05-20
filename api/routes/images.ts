@@ -5,6 +5,8 @@ import cloudinary from 'cloudinary';
 import { FileUpload } from '../interfaces/images.interfaces';
 import '../strategies/jwt';
 import passport from 'passport';
+import bcrypt from 'bcryptjs';
+import { IUser } from '../models/user.model';
 
 
 const cloudinaryOptions = {
@@ -27,8 +29,6 @@ const imagesApi = (app: Express) => {
 
   router.get('/', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
     const { query: { page } } = req;
-    console.log(req.user);
-    
     let pagina = Number(page) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
@@ -87,9 +87,14 @@ const imagesApi = (app: Express) => {
 
   router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
     const { params: { id } } = req;
+    const { body: { password } } = req;
     const imageToDelete = await Image.findOne({ _id: id });
     const public_id  = imageToDelete?.public_id || "";
+    const currentUser = req.user as IUser;
 
+    if(! await bcrypt.compare(password, currentUser.password))
+      return response({ res: res, ok: false, status: 401, message: 'No estas autorizado para eliminar esta imagen' });
+    
     try{
       await Image.deleteOne({ _id: id });
       cloudinary.v2.uploader.destroy(public_id, (error, result) => {

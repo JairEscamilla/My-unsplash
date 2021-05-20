@@ -19,7 +19,6 @@ const usersApi = (app: Express) => {
   router.post('/sign_in', async (req: Request, res: Response, next: NextFunction) => {
     
     passport.authenticate('basic', function(error, user){
-      console.log("pasa por aca");
       if(error || !user)
         response({ res: res, ok: false, status: 501, message: 'Credenciales incorrectas' });
       
@@ -54,6 +53,22 @@ const usersApi = (app: Express) => {
       console.error(`Ha ocurrido un error: ${error}`);
       response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al crear el usuario' });
     }
+  });
+
+  router.post('/validate_data', async (req: Request, res: Response) => {
+    const { usernameOrEmail } = req.body;
+    const user = await User.find().or([
+      { username: usernameOrEmail },
+      { email: usernameOrEmail }
+    ]).exec();
+
+    console.log(user);
+    
+
+    if(user.length === 0)
+      response({ res: res, ok: true, status: 200, message: 'Username o email disponibles' });
+    else
+      response({ res: res, ok: false, status: 500, message: 'Ya existe un usuario con esa informacion' });
   });
 }
 

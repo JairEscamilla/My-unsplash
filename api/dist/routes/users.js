@@ -55,7 +55,6 @@ var usersApi = function (app) {
     router.post('/sign_in', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             passport_1.default.authenticate('basic', function (error, user) {
-                console.log("pasa por aca");
                 if (error || !user)
                     response_1.response({ res: res, ok: false, status: 501, message: 'Credenciales incorrectas' });
                 req.login(user, { session: false }, function (error) {
@@ -101,6 +100,27 @@ var usersApi = function (app) {
                     response_1.response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al crear el usuario' });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
+            }
+        });
+    }); });
+    router.post('/validate_data', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var usernameOrEmail, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    usernameOrEmail = req.body.usernameOrEmail;
+                    return [4 /*yield*/, user_model_1.User.find().or([
+                            { username: usernameOrEmail },
+                            { email: usernameOrEmail }
+                        ]).exec()];
+                case 1:
+                    user = _a.sent();
+                    console.log(user);
+                    if (user.length === 0)
+                        response_1.response({ res: res, ok: true, status: 200, message: 'Username o email disponibles' });
+                    else
+                        response_1.response({ res: res, ok: false, status: 500, message: 'Ya existe un usuario con esa informacion' });
+                    return [2 /*return*/];
             }
         });
     }); });

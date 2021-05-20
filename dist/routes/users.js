@@ -115,7 +115,6 @@ var usersApi = function (app) {
                         ]).exec()];
                 case 1:
                     user = _a.sent();
-                    console.log(user);
                     if (user.length === 0)
                         response_1.response({ res: res, ok: true, status: 200, message: 'Username o email disponibles' });
                     else

@@ -6,34 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var config_1 = require("./config");
 var images_1 = __importDefault(require("./routes/images"));
-var mongoose_1 = __importDefault(require("mongoose"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var express_fileupload_1 = __importDefault(require("express-fileupload"));
-var cloudinary_1 = __importDefault(require("cloudinary"));
 var users_1 = __importDefault(require("./routes/users"));
+var db_1 = require("./config/db");
+var cloudinaryConfig_1 = require("./config/cloudinaryConfig");
 var app = express_1.default();
 var router = express_1.default.Router();
-// Conexion con la base de datos
-var USER = config_1.config.dbuser;
-var PASSWORD = config_1.config.dbpassword;
-var MONGO_URI = "mongodb+srv://" + USER + ":" + PASSWORD + "@" + config_1.config.dbHost + ":/" + config_1.config.dbName + "?retryWrites=true&w=majority";
-mongoose_1.default.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-}, function (error) {
-    if (error) {
-        console.error('Ha ocurrido un error):');
-        throw error;
-    }
-    console.log('La base de datos está conectada');
-});
-// Configuracion de cloudinary
-cloudinary_1.default.v2.config({
-    cloud_name: config_1.config.cloudName,
-    api_key: config_1.config.apiKey,
-    api_secret: config_1.config.apiSecret
-});
+db_1.connectDB();
+cloudinaryConfig_1.connectCloudinary();
 // Middlewares
 app.use(express_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

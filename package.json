@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "set DEBUG=app:*&& nodemon dist/",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "set NODE_ENV=production&& node dist/"
   },
   "keywords": [

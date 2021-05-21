@@ -23,6 +23,7 @@ exports.config = void 0;
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
 exports.config = {
+    nodeEnv: process.env.NODE_ENV,
     port: process.env.PORT || 3000,
     dbuser: process.env.USER,
     dbpassword: process.env.PASSWORD,

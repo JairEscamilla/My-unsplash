@@ -23,9 +23,9 @@ app.use(express_fileupload_1.default({ useTempFiles: true }));
 images_1.default(app);
 users_1.default(app);
 if (config_1.config.nodeEnv === 'production') {
-    app.use(express_1.default.static(path_1.default.join(__dirname, '../frontend/dist')));
+    app.use(express_1.default.static(path_1.default.join(__dirname, 'frontend/dist')));
     app.get('*', function (req, res) {
-        res.sendFile(path_1.default.join(__dirname, '../frontend', 'dist', 'index.html'));
+        res.sendFile(path_1.default.join(__dirname, 'frontend', 'dist', 'index.html'));
     });
 }
 else {

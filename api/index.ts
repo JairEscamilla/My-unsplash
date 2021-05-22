@@ -6,7 +6,6 @@ import fileUpload from 'express-fileupload';
 import usersApi from './routes/users';
 import { connectDB } from './config/db';
 import { connectCloudinary } from './config/cloudinaryConfig';
-import path from 'path';
 const app = express();
 
 

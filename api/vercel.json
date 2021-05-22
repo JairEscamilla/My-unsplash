@@ -1,0 +1,27 @@
+{
+  "name": "my-unsplash-api",
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.ts"
+    }
+  ],
+  "env": {
+    "PORT": "80",
+    "USER": "@bduser",
+    "PASSWORD": "@bdpassword",
+    "DB_HOST": "@bdhost",
+    "DB_NAME": "@bdname",
+    "CLOUD_NAME": "@cloudname",
+    "API_KEY": "@apikey",
+    "API_SECRET": "@apisecret",
+    "JWT_KEY": "@jwtkey"
+  }
+}

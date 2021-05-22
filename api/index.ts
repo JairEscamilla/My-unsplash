@@ -25,18 +25,11 @@ usersApi(app);
 
 
 
-if(config.nodeEnv === 'production'){
-  
-  app.use(express.static(path.join(__dirname, 'frontend/dist')));
-  app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
-  });
-}else{
-    // Ruta principal
-  app.get('/', (req: Request, res: Response) => {
-    res.send(`<h1>Bienvenido a la API de MyUnsplash</h1>`);
-  });
-}
+// Ruta principal
+app.get('/', (req: Request, res: Response) => {
+  res.send(`<h1>Bienvenido a la API de MyUnsplash</h1>`);
+});
+
 // Iniciando servidor
 app.listen(config.port, () => {
   console.log(`Server listening on port ${config.port}`);

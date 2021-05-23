@@ -1,12 +1,16 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Feed } from './pages/Feeed/Feed';
+import { Login } from './pages/Login/Login';
 
 const App = () => {
   return (
-    <div>
-      Este es el inicio de My unsplash
-      <p>Aqui vamos a continuar</p>
-      <p>Holaa</p>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route exact path="/feed" component={Feed} />
+      </Switch>
+    </BrowserRouter>    
   )
 }
 

@@ -4,6 +4,7 @@ import { useForm } from '../../hooks/useForm';
 import { LoginResponse } from '../../api/models/LoginResponse';
 import { RouteComponentProps } from 'react-router';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import { Spinner } from '../../shared/Spinner/Spinner';
 
 export const Login = ({ history }: RouteComponentProps) => {
 
@@ -55,6 +56,7 @@ export const Login = ({ history }: RouteComponentProps) => {
         onSuccess={googleReponse}
         cookiePolicy={'single_host_origin'}
       />
+      <Spinner/>
     </div>
   )
 }

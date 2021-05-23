@@ -3,7 +3,7 @@ import { httpClient } from '../../api/httpClient';
 import { useForm } from '../../hooks/useForm';
 import { LoginResponse } from '../../api/models/LoginResponse';
 import { RouteComponentProps } from 'react-router';
-
+import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 export const Login = ({ history }: RouteComponentProps) => {
 
@@ -23,6 +23,10 @@ export const Login = ({ history }: RouteComponentProps) => {
     }).catch(() => {
       console.error("Ha ocurrido un error");    
     });   
+  }
+
+  const googleReponse = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+    console.log(response); 
   }
 
   return (
@@ -45,6 +49,12 @@ export const Login = ({ history }: RouteComponentProps) => {
           Login
         </button>
       </form>
+      <GoogleLogin
+        clientId={`${process.env.GOOGLE_CLIENT_ID}`}
+        buttonText="Login"
+        onSuccess={googleReponse}
+        cookiePolicy={'single_host_origin'}
+      />
     </div>
   )
 }

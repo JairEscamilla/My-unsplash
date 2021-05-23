@@ -8,6 +8,7 @@ import { Spinner } from '../../shared/Spinner/Spinner';
 import { Card } from '../../shared/Card/Card';
 import { StyledLogin } from './styles';
 import { Input } from '../../shared/Input/Input';
+import { Button, ButtonVariants } from '../../shared/Button/Button';
 
 export const Login = ({ history }: RouteComponentProps) => {
 
@@ -41,6 +42,7 @@ export const Login = ({ history }: RouteComponentProps) => {
             inputName="email"
             label="Email"
             placeholder="Suspendisee elit massa"
+            type='email'
             onChange={({ target }) => onChange(target.value, 'username')}
           />
           <Input
@@ -60,7 +62,6 @@ export const Login = ({ history }: RouteComponentProps) => {
           onSuccess={googleReponse}
           cookiePolicy={'single_host_origin'}
         />
-        <Spinner/>
       </div>
     </StyledLogin>
   )

@@ -5,17 +5,18 @@ interface InputProps {
   label: string;
   inputName: string;
   placeholder?: string;
-  type?: 'text' | 'password';
+  type?: 'text' | 'password' | 'email';
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const StyledInputContainer = styled.div `
   margin: 20px 0;
-  & label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 600;
-  }
+`;
+
+const StyledLabel = styled.label `
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
 `;
 
 const StyledInput = styled.input `
@@ -36,9 +37,9 @@ export const Input = ({
   onChange
 }: InputProps) => (
   <StyledInputContainer>
-    <label htmlFor={inputName}>
+    <StyledLabel htmlFor={inputName}>
       {label}
-    </label>
+    </StyledLabel>
     <StyledInput
       placeholder={placeholder}
       name={inputName}

@@ -6,4 +6,8 @@ export const StyledLogin = styled.section `
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & .main-content {
+    width: 80%;
+  }
 `;

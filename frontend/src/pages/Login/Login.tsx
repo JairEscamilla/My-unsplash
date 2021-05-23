@@ -7,7 +7,7 @@ import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 
 export const Login = ({ history }: RouteComponentProps) => {
 
-  const { onChange, username, password, formulario } = useForm({
+  const { onChange, formulario } = useForm({
     username: "",
     password: ""
   });
@@ -46,7 +46,7 @@ export const Login = ({ history }: RouteComponentProps) => {
         </div>
 
         <button type="submit">
-          Login
+          Login 
         </button>
       </form>
       <GoogleLogin

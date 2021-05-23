@@ -5,6 +5,9 @@ import { LoginResponse } from '../../api/models/LoginResponse';
 import { RouteComponentProps } from 'react-router';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { Spinner } from '../../shared/Spinner/Spinner';
+import { Card } from '../../shared/Card/Card';
+import { StyledLogin } from './styles';
+import { Input } from '../../shared/Input/Input';
 
 export const Login = ({ history }: RouteComponentProps) => {
 
@@ -31,32 +34,34 @@ export const Login = ({ history }: RouteComponentProps) => {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">
-            Email:
-            <input type="text" name="email" onChange={({ target }) => onChange(target.value, 'username') } />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="password">
-            Password:
-            <input type="password" name="password" onChange={({ target }) => onChange(target.value, 'password')} />
-          </label>
-        </div>
+    <StyledLogin>
+      <div className="main-content" style={{  width: '80%' }}>
+        <form onSubmit={handleSubmit}>
+          <Input
+            inputName="email"
+            label="Email"
+            placeholder="Suspendisee elit massa"
+            onChange={({ target }) => onChange(target.value, 'username')}
+          />
+          <Input
+            inputName="password"
+            label="Password"
+            type="password"
+            onChange={({ target }) => onChange(target.value, 'password')}
+          />
 
-        <button type="submit">
-          Login 
-        </button>
-      </form>
-      <GoogleLogin
-        clientId={`${process.env.GOOGLE_CLIENT_ID}`}
-        buttonText="Login"
-        onSuccess={googleReponse}
-        cookiePolicy={'single_host_origin'}
-      />
-      <Spinner/>
-    </div>
+          <button type="submit">
+            Login 
+          </button>
+        </form>
+        <GoogleLogin
+          clientId={`${process.env.GOOGLE_CLIENT_ID}`}
+          buttonText="Login"
+          onSuccess={googleReponse}
+          cookiePolicy={'single_host_origin'}
+        />
+        <Spinner/>
+      </div>
+    </StyledLogin>
   )
 }

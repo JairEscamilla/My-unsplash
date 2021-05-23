@@ -11,8 +11,14 @@ var express_fileupload_1 = __importDefault(require("express-fileupload"));
 var users_1 = __importDefault(require("./routes/users"));
 var db_1 = require("./config/db");
 var cloudinaryConfig_1 = require("./config/cloudinaryConfig");
-var path_1 = __importDefault(require("path"));
+var cors_1 = __importDefault(require("cors"));
 var app = express_1.default();
+// Configurando CORS
+var allowedOrigins = ['http://localhost:3000', 'https://my-unsplash-c31a1.web.app'];
+var options = {
+    origin: allowedOrigins
+};
+app.use(cors_1.default(options));
 db_1.connectDB();
 cloudinaryConfig_1.connectCloudinary();
 // Middlewares
@@ -22,18 +28,10 @@ app.use(express_fileupload_1.default({ useTempFiles: true }));
 // Conectando rutas
 images_1.default(app);
 users_1.default(app);
-if (config_1.config.nodeEnv === 'production') {
-    app.use(express_1.default.static(path_1.default.join(__dirname, 'frontend/dist')));
-    app.get('*', function (req, res) {
-        res.sendFile(path_1.default.join(__dirname, 'frontend', 'dist', 'index.html'));
-    });
-}
-else {
-    // Ruta principal
-    app.get('/', function (req, res) {
-        res.send("<h1>Bienvenido a la API de MyUnsplash</h1>");
-    });
-}
+// Ruta principal
+app.get('/', function (req, res) {
+    res.send("<h1>Bienvenido a la REST API de MyUnsplash</h1>");
+});
 // Iniciando servidor
 app.listen(config_1.config.port, function () {
     console.log("Server listening on port " + config_1.config.port);

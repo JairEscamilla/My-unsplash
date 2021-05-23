@@ -56,13 +56,13 @@ var usersApi = function (app) {
         return __generator(this, function (_a) {
             passport_1.default.authenticate('basic', function (error, user) {
                 if (error || !user)
-                    response_1.response({ res: res, ok: false, status: 501, message: 'Credenciales incorrectas' });
+                    return response_1.response({ res: res, ok: false, status: 401, message: 'Credenciales incorrectas' });
                 req.login(user, { session: false }, function (error) {
                     return __awaiter(this, void 0, void 0, function () {
                         var username, email, profile_photo, payload, jwtSecret, token;
                         return __generator(this, function (_a) {
                             if (error)
-                                response_1.response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al autenticar al usuario' });
+                                return [2 /*return*/, response_1.response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al autenticar al usuario' })];
                             username = user.username, email = user.email, profile_photo = user.profile_photo;
                             payload = {
                                 email: email

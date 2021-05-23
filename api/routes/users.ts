@@ -20,11 +20,11 @@ const usersApi = (app: Express) => {
     
     passport.authenticate('basic', function(error, user){
       if(error || !user)
-        response({ res: res, ok: false, status: 501, message: 'Credenciales incorrectas' });
+        return response({ res: res, ok: false, status: 401, message: 'Credenciales incorrectas' });
       
       req.login(user, { session: false }, async function(error)  {
         if(error)
-          response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al autenticar al usuario' });
+          return response({ res: res, ok: false, status: 500, message: 'Ha ocurrido un error al autenticar al usuario' });
         
         const { username, email, profile_photo } = user;
 
@@ -37,7 +37,7 @@ const usersApi = (app: Express) => {
         const token = jwt.sign(payload, jwtSecret, {
           expiresIn: '1h'
         });
-
+        
         response({ res: res, ok: true, status: 200, message: 'Inicio de sesión exitoso', extra_data: { user: { username, email, profile_photo }, token} });
 
       });

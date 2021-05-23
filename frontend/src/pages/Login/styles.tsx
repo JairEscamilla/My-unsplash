@@ -9,5 +9,6 @@ export const StyledLogin = styled.section `
 
   & .main-content {
     width: 80%;
+    max-width: 450px;
   }
 `;

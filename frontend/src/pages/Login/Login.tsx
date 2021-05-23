@@ -14,7 +14,9 @@ export const Login = ({ history }: RouteComponentProps) => {
   return (
     <StyledLogin>
       <div className="main-content">
-        <LoginForm/>
+        <LoginForm
+          history={history}
+        />
         <GoogleLogin
           clientId={`${process.env.GOOGLE_CLIENT_ID}`}
           buttonText="Login"

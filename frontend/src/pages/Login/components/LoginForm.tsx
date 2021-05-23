@@ -39,7 +39,6 @@ export const LoginForm = ({ history }: LoginFormProps) => {
       <Input
         inputName="email"
         label="Email"
-        placeholder="Suspendisee elit massa"
         type='email'
         onChange={({ target }) => onChange(target.value, 'username')}
       />

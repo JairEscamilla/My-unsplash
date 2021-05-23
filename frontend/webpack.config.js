@@ -30,6 +30,17 @@ module.exports = () => {
           use: {
             loader: 'awesome-typescript-loader'
           }
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif|webp|svg)$/,
+          use: [
+            {
+              'loader': 'file-loader',
+              'options': {
+                name: 'assets/[hash].[ext]'
+              }
+            }
+          ]
         }
       ]
     },

@@ -9,7 +9,7 @@ interface Data {
   token: string;
 }
 
-interface User {
+export interface User {
   username: string;
   email: string;
   profile_photo: string;

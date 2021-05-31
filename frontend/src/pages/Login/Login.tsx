@@ -1,14 +1,13 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { GoogleAuthWrapper, OrWrapper, SignUpWrapper, StyledLogin } from './styles';
-import { LoginForm } from './components/LoginForm';
+import LoginForm from './components/LoginForm';
 import { Link } from 'react-router-dom';
 import { LoginHeader } from './components/LoginHeader';
 
 
 
-export const Login = ({ history }: RouteComponentProps) => {
+export const Login = () => {
   const googleReponse = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     console.log(response); 
   }
@@ -28,9 +27,7 @@ export const Login = ({ history }: RouteComponentProps) => {
         <OrWrapper>
           OR
         </OrWrapper>
-        <LoginForm
-          history={history}
-        />
+        <LoginForm/>
         <SignUpWrapper>
           Don´t you have an account? 
           <Link to="/" className="link">

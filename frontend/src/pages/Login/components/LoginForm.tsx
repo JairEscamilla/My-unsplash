@@ -1,18 +1,21 @@
-import React, { FormEvent, useState } from 'react'
+import React, { Dispatch, FormEvent, useState } from 'react'
 import { useForm } from '../../../hooks/useForm';
 import { Input } from '../../../shared/Input/Input';
-import { LoginResponse } from '../../../api/models/LoginResponse';
+import { LoginResponse, User } from '../../../api/models/LoginResponse';
 import { httpClient } from '../../../api/httpClient';
 import { Button } from '../../../shared/Button/Button';
-import { History } from 'history';
+import { connect } from 'react-redux';
+import { doLogin } from '../../../actions';
+import { useHistory } from 'react-router';
+
 interface LoginFormProps {
-  history: History
+  doLogin: (token: string, user: User) => void;
 }
 
-export const LoginForm = ({ history }: LoginFormProps) => {
+const LoginForm = ({ doLogin }: LoginFormProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
-
+  const history = useHistory();
   const { onChange, formulario } = useForm({
     username: "",
     password: ""
@@ -27,7 +30,8 @@ export const LoginForm = ({ history }: LoginFormProps) => {
       console.log(data);
       setIsLoading(false);
       if(data.ok){
-        history.push('/feed');
+        doLogin(data.data.token, data.data.user);
+        history.push("/feed");
       }
     }).catch(() => {
       console.error("Ha ocurrido un error");    
@@ -59,3 +63,9 @@ export const LoginForm = ({ history }: LoginFormProps) => {
     </form>
   )
 }
+
+const mapDispatchToProps = {
+  doLogin
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm);

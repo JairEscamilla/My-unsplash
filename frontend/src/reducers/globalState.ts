@@ -1,10 +1,22 @@
-type globalAction = 
-                  | {type: 'login'}
+import { User } from '../api/models/LoginResponse';
+import { globalStateType, initialState } from '../App';
+interface loginPayload {
+  token: string;
+  user: User;
+}
 
-const globalState = (state = {}, action: globalAction) => {
+type globalAction = 
+                  | {type: 'LOGIN', payload:loginPayload }
+
+const globalState = (state: globalStateType = initialState, action: globalAction): globalStateType => {
   switch(action.type){
-    case 'login':
-      return state;
+    case 'LOGIN':
+      return {
+        ...state,
+        token: action.payload.token,
+        user: action.payload.user,
+        authenticated: true
+      };
     
       default:
         return state;

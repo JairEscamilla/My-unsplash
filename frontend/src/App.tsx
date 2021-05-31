@@ -6,11 +6,19 @@ import { GlobalStyles } from './styles/globalStyles';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import globalState from './reducers/globalState';
+import { User } from './api/models/LoginResponse';
 
-const initialState = {
+export type globalStateType = {
+  loading: boolean;
+  authenticated: boolean;
+  token: string | null;
+  user: User
+} 
+
+export const initialState: globalStateType = {
   loading: false,
   authenticated: false,
-  token: '',
+  token: null,
   user: {
     username: '',
     email: '',

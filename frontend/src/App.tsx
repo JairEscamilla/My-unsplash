@@ -1,12 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Feed } from './pages/Feeed/Feed';
-import { Login } from './pages/Login/Login';
-import { GlobalStyles } from './styles/globalStyles';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import globalState from './reducers/globalState';
 import { User } from './api/models/LoginResponse';
+import Routes from './Routes';
 
 export type globalStateType = {
   loading: boolean;
@@ -39,13 +36,7 @@ const store = createStore(globalState, initialState, composeEnhancers());
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <GlobalStyles theme={'light'} />
-        <Switch>
-          <Route exact path="/" component={Login} />
-          <Route exact path="/feed" component={Feed} />
-        </Switch>
-      </BrowserRouter>    
+        <Routes/>
     </Provider>
   )
 }

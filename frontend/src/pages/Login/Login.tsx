@@ -10,13 +10,11 @@ import { Notification } from '../../shared/Notification/Notification';
 
 export const Login = () => {
 
-  const [error, setError] = useState(false);
+  const [notificationIsOpened, setNotificationIsOpened] = useState(false);
 
   const googleReponse = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     console.log(response); 
   }
-
-  console.log(error);
   
 
   return (
@@ -24,8 +22,8 @@ export const Login = () => {
       <Notification 
         text="Invalid email or password" 
         variant="error" 
-        isOpened={error} 
-        setError={setError} 
+        isOpened={notificationIsOpened} 
+        setNotificationIsOpened={setNotificationIsOpened} 
       />
       <StyledLogin>
         <div className="main-content">
@@ -41,7 +39,7 @@ export const Login = () => {
           <OrWrapper>
             OR
           </OrWrapper>
-          <LoginForm setError={setError} />
+          <LoginForm setNotificationIsOpened={setNotificationIsOpened} />
           <SignUpWrapper>
             Don´t you have an account? 
             <Link to="/" className="link">

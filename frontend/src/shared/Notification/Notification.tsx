@@ -8,7 +8,7 @@ type NotificationProps = {
   text: string;
   variant: NotificationVariants;
   isOpened: boolean;
-  setError: (error: boolean) => void;
+  setNotificationIsOpened: (opened: boolean) => void;
 }
 
 type StyledNotificationProps = {
@@ -57,14 +57,14 @@ const StyledNotification = styled.div<StyledNotificationProps> `
   }
 `;
 
-export const Notification = ( { text, variant, isOpened, setError }: NotificationProps) => {
+export const Notification = ( { text, variant, isOpened, setNotificationIsOpened }: NotificationProps) => {
 
   const [ closeAnimation, setCloseAnimation ] = useState(false);
 
   const handleClose = () => {
     setCloseAnimation(true);
     setTimeout(() => {
-      setError(false);
+      setNotificationIsOpened(false);
       setCloseAnimation(false);
     }, 1000);
   }

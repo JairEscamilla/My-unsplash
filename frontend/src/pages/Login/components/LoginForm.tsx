@@ -10,10 +10,10 @@ import { useHistory } from 'react-router';
 
 interface LoginFormProps {
   doLogin: (token: string, user: User) => void;
-  setError: (error: boolean) => void;
+  setNotificationIsOpened: (error: boolean) => void;
 }
 
-const LoginForm = ({ doLogin, setError }: LoginFormProps) => {
+const LoginForm = ({ doLogin, setNotificationIsOpened }: LoginFormProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
@@ -36,7 +36,7 @@ const LoginForm = ({ doLogin, setError }: LoginFormProps) => {
       }
     }).catch(() => {
       console.error("Ha ocurrido un error");
-      setError(true);    
+      setNotificationIsOpened(true);    
       setIsLoading(false);
     });   
   }

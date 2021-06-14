@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { GoogleAuthWrapper, OrWrapper, SignUpWrapper, StyledLogin } from './styles';
 import LoginForm from './components/LoginForm';
@@ -9,13 +9,22 @@ import { Notification } from '../../shared/Notification/Notification';
 
 
 export const Login = () => {
+
+  const [notificationIsOpened, setNotificationIsOpened] = useState(false);
+
   const googleReponse = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     console.log(response); 
   }
+  
 
   return (
     <>
-      <Notification text="Invalid email or password" variant="error"/>
+      <Notification 
+        text="Invalid email or password" 
+        variant="error" 
+        isOpened={notificationIsOpened} 
+        setNotificationIsOpened={setNotificationIsOpened} 
+      />
       <StyledLogin>
         <div className="main-content">
           <LoginHeader/>
@@ -30,7 +39,7 @@ export const Login = () => {
           <OrWrapper>
             OR
           </OrWrapper>
-          <LoginForm/>
+          <LoginForm setNotificationIsOpened={setNotificationIsOpened} />
           <SignUpWrapper>
             Don´t you have an account? 
             <Link to="/" className="link">

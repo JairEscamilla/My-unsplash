@@ -7,10 +7,13 @@ type NotificationVariants = | 'success' | 'error';
 type NotificationProps = {
   text: string;
   variant: NotificationVariants;
+  isOpened: boolean;
+  setNotificationIsOpened: (opened: boolean) => void;
 }
 
 type StyledNotificationProps = {
   variant: NotificationVariants;
+  isOpened: boolean;
 }
 
 const StyledNotification = styled.div<StyledNotificationProps> `
@@ -54,13 +57,30 @@ const StyledNotification = styled.div<StyledNotificationProps> `
   }
 `;
 
-export const Notification = ( { text, variant }: NotificationProps) => {
-  const [ isVisible, setIsVisible ] = useState(true);
+export const Notification = ( { text, variant, isOpened, setNotificationIsOpened }: NotificationProps) => {
 
+  const [ closeAnimation, setCloseAnimation ] = useState(false);
+
+  const handleClose = () => {
+    setCloseAnimation(true);
+    setTimeout(() => {
+      setNotificationIsOpened(false);
+      setCloseAnimation(false);
+    }, 1000);
+  }
+  
   return (
-    <StyledNotification variant={variant} className={`${!isVisible && 'notification-closed'}`} >
-      <IoCloseSharp className="close-icon" onClick={() => setIsVisible(false)} />
-      { text }
-    </StyledNotification>
+    <>
+      {isOpened && 
+        <StyledNotification 
+          variant={variant} 
+          className={`${closeAnimation &&'notification-closed'}`} 
+          isOpened={isOpened}
+        >
+          <IoCloseSharp className="close-icon" onClick={handleClose} />
+            { text }
+        </StyledNotification>  
+      }
+    </>
   )
 }

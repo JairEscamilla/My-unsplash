@@ -18,15 +18,7 @@ const Routes = ({ authenticated }: RoutesProps) => {
       <GlobalStyles theme={'light'} />
       <Switch>
         <Route exact path="/" component={Login} />
-        {authenticated ?
-          <>
-            <Route exact path="/feed" component={Feed} />
-          </>
-        : 
-          <>
-            
-          </>
-        }
+        <Route exact path="/feed" component={Feed} />
       </Switch>
     </BrowserRouter>  
   )

@@ -15,6 +15,8 @@ interface ButtonProps {
   variant?: ButtonVariants;
   bold?: boolean;
   width?: string;
+  className?: string;
+  onClick?: () => void
 }
 
 interface StyledButtonProps {
@@ -61,9 +63,19 @@ export const Button = ({
   loading = false,
   variant = ButtonVariants.Primary,
   bold = false,
-  width = '100%'
+  width = '100%',
+  className= "",
+  onClick
 }: ButtonProps) => (
-  <StyledButton disabled={disabled} type={type} variant={variant} bold={bold} width={width}>
+  <StyledButton 
+    className={className} 
+    disabled={disabled} 
+    type={type} 
+    variant={variant} 
+    bold={bold} 
+    width={width}
+    onClick={onClick}
+  >
     { loading ? 
         <SpinnerContainer>
           <Spinner

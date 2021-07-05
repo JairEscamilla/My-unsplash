@@ -5,7 +5,7 @@ interface GlobalStylesProps {
 }
 
 export const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap');
   body {
     background: ${props => (props.theme === 'dark'? '#1a1a1a' : 'white')};
   }
